@@ -10,8 +10,10 @@ import {
 } from "@expo-google-fonts/poppins";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
-import CreateAccount from "./createAccount/CreateAccount";
+import CreateAccount from "./CreateAccount";
 import { useState } from "react";
+import WalletView from "./wallet/WalletView";
+import RecoverWallet from "./RecoverWallet";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,21 +32,56 @@ export default function App() {
   return (
     <NavigationContainer>
       <StatusBar style="auto" />
-      <Stack.Navigator initialRouteName="Getting Started">
-        <Stack.Screen
-          name="Getting Started"
-          options={{ headerShown: false }}
-          component={GettingStarted}
-        />
-        <Stack.Screen name="Create Account" options={{ headerShown: false }}>
-          {(props) => (
-            <CreateAccount
-              {...props}
-              setWallet={setWallet}
-              setSeedPhrase={setSeedPhrase}
+      <Stack.Navigator
+        initialRouteName={
+          wallet && seedPhrase ? "Your Wallet" : "Getting Started"
+        }
+      >
+        {wallet && seedPhrase ? (
+          <Stack.Screen name="Your Wallet" options={{ headerShown: false }}>
+            {(props) => (
+              <WalletView
+                {...props}
+                seedPhrase={seedPhrase}
+                wallet={wallet}
+                setSeedPhrase={setSeedPhrase}
+                setWallet={setWallet}
+              />
+            )}
+          </Stack.Screen>
+        ) : (
+          <>
+            <Stack.Screen
+              name="Getting Started"
+              options={{ headerShown: false }}
+              component={GettingStarted}
             />
-          )}
-        </Stack.Screen>
+            <Stack.Screen
+              name="Create Account"
+              options={{ headerShown: false }}
+            >
+              {(props) => (
+                <CreateAccount
+                  {...props}
+                  setWallet={setWallet}
+                  setSeedPhrase={setSeedPhrase}
+                />
+              )}
+            </Stack.Screen>
+            <Stack.Screen
+              name="Recover Account"
+              options={{ headerShown: false }}
+            >
+              {(props) => (
+                <RecoverWallet
+                  {...props}
+                  setWallet={setWallet}
+                  setSeedPhrase={setSeedPhrase}
+                />
+              )}
+            </Stack.Screen>
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

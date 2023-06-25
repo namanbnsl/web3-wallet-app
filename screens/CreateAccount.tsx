@@ -1,19 +1,18 @@
 import "@walletconnect/react-native-compat";
 
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import { colors } from "../../utils/colors";
+import * as Clipboard from "expo-clipboard";
+import { colors } from "../utils/colors";
 import { useState } from "react";
 
-const CreateAccount = ({
-  navigation,
-  setWallet,
-  setSeedPhrase,
-}: {
+interface Props {
   navigation: any;
   route: any;
-  setWallet: any;
-  setSeedPhrase: any;
-}) => {
+  setWallet: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setSeedPhrase: React.Dispatch<React.SetStateAction<string | undefined>>;
+}
+
+const CreateAccount = ({ navigation, setWallet, setSeedPhrase }: Props) => {
   const [newSeedPhrase, setNewSeedPhrase] = useState<string | null>();
   const [newWallet, setNewWallet] = useState<any>();
 
@@ -54,6 +53,25 @@ const CreateAccount = ({
       )}
 
       {newSeedPhrase && <Text style={styles.seedPhrase}>{newSeedPhrase}</Text>}
+
+      {newSeedPhrase && (
+        <TouchableOpacity
+          style={styles.generateButton}
+          onPress={() => {
+            Clipboard.setStringAsync(newSeedPhrase);
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "Poppins_400Regular",
+              fontSize: 14,
+              color: "white",
+            }}
+          >
+            Copy To Clipboard
+          </Text>
+        </TouchableOpacity>
+      )}
 
       {newSeedPhrase && (
         <TouchableOpacity

@@ -22,7 +22,12 @@ const GettingStarted = ({ navigation }: { navigation: any }) => (
       </Text>
     </TouchableOpacity>
 
-    <TouchableOpacity style={styles.recoverWalletButton}>
+    <TouchableOpacity
+      style={styles.recoverWalletButton}
+      onPress={() => {
+        navigation.navigate("Recover Account");
+      }}
+    >
       <Text
         style={{
           fontFamily: "Poppins_400Regular",
